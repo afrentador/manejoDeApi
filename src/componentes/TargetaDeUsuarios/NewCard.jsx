@@ -1,69 +1,64 @@
 import { Botones } from '../Botones/Botones';
-import { TiArrowLeftOutline } from "react-icons/ti";
-import { TiArrowRightOutline } from "react-icons/ti";
+import { TiArrowLeftOutline, TiArrowRightOutline} from "react-icons/ti";
 import { useEffect, useState } from 'react'
 import './NewCard.css'
 
 export const NewCard = () => {
+  const [charters, setCharters] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const cardsPerPage = 4;
 
-  const [charter, setCharter] = useState([]);
-  //logica del boton
-  const [nexUsers, setNexUsers] = useState(1);
-
-    
-    const prevClick = () => {
-        (nexUsers === 1) 
-        ?setNexUsers(1) 
-        :setNexUsers(nexUsers - 1)
-    }
-
-    const nexClick = () => setNexUsers(nexUsers + 1);
-//logica del boton
-
-  useEffect(() => {
-    fetchCharter(nexUsers)
-  },[nexUsers])
-  
-   const fetchCharter = async (id) => {
-    const result = await fetch(`https://pokeapi.co/api/v2/evolution-chain/${id}/`)
-    const data = await result.json();
-        
-    // let charNameIgmArray = []
-
-    let nameCharter = data.chain.species.name
-    let imgCharter = await changeNameImg(nameCharter)
-    // charNameIgmArray.push([nameCharter, imgCharter])
-    setCharter([nameCharter, imgCharter])
-
-    // if(data.chain.evolves_to.length !== 0){
-    //   let nameCharterv2 = data.chain.evolves_to[0].species.name;
-    //   let imgCharterv2 = await changeNameImg(nameCharterv2)
-    //   charNameIgmArray.push([nameCharterv2, imgCharterv2])
-
-    //   if(data.chain.evolves_to[0].evolves_to.length !== 0){
-    //     let nameCharterv3 = data.chain.evolves_to[0].species.name;
-    //     let imgCharterv3 = await changeNameImg(nameCharterv3)
-    //     charNameIgmArray.push([nameCharterv3, imgCharterv3])
-    //     setCharter(charNameIgmArray)
-    //   }
-    // }    
+  const prevClick = () => {
+    setCurrentPage(prev => Math.max(prev - 1, 1));
   }
 
-   const changeNameImg = async (name) => {
-    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}/`)
-    const data = await res.json()
+  const nexClick = () => {
+    setCurrentPage(prev => prev + 1);
+  }
+
+  useEffect(() => {
+    const fetchCharters = async () => {
+      const newCharters = [];
+      for (let i = 0; i < cardsPerPage; i++) {
+        const id = (currentPage - 1) * cardsPerPage + i + 1;
+        const charter = await fetchCharter(id);
+        newCharters.push(charter);
+      }
+      setCharters(newCharters);
+    };
+
+    fetchCharters();
+  }, [currentPage]);
+
+  const fetchCharter = async (id) => {
+    const result = await fetch(`https://pokeapi.co/api/v2/evolution-chain/${id}/`);
+    const data = await result.json();
+    
+    let nameCharter = data.chain.species.name;
+    let imgCharter = await changeNameImg(nameCharter);
+    
+    return [nameCharter, imgCharter];
+  }
+
+  const changeNameImg = async (name) => {
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}/`);
+    const data = await res.json();
     return data.sprites.other['official-artwork'].front_default; 
   }
 
   return (
     <>
-    <section className='container'>
-      <div className='card'>
-        <p className='card__name'>{charter[0]}</p>
-        <div className='card__circle'></div>
-        <img className='card__img' src={charter[1]} alt="pokemon" />
+      <div className="cards-container">
+        {charters.map((charter, index) => (
+          <section className='container' key={index}>
+            <div className='card'>
+              <p className='card__name'>{charter[0]}</p>
+              <div className='card__circle'></div>
+              <img className='card__img' src={charter[1]} alt="pokemon" />
+            </div>
+          </section>
+        ))}
       </div>
-    </section>
       <div className='btn__container'>
         <Botones icon={<TiArrowLeftOutline />} handleClick={prevClick}/>
         <Botones icon={<TiArrowRightOutline />} handleClick={nexClick}/>
