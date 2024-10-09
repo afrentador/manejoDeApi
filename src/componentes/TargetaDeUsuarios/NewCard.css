@@ -1,0 +1,49 @@
+.container{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+.card{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 200px;
+    height: 250px;
+    border-radius: 20px;
+    color: blue;
+    background-color: rgb(0, 225, 255);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 3px 3px 10px;
+    padding: 48px 12px 12px;
+    margin-bottom: 2rem;
+}
+.card__name{
+    background-color: #997fff;
+    color: beige;
+    text-align: center;
+    width: 140px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 6px 12px;
+}
+.card__circle{
+    background-color: aquamarine;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    position: absolute;
+    top: 66px;
+    left: 24px;
+}
+.card__img{
+    position: absolute; 
+    width: 150px;
+}
+
+.btn__container{
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}

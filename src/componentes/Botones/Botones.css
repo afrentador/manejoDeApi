@@ -1,0 +1,33 @@
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: aquamarine;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 36px;
+    /* display: flex;
+    justify-content: space-between; */
+}
+
+.btn__box{
+    position: relative;
+}
+
+.btn__shadow{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #997fff;
+    position: absolute;
+    top: 8px;
+    z-index: -1;
+}
+
+.btn:active{
+    transform: translateY(6px);
+}
